@@ -1,19 +1,151 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test Camera</title>
-    <link rel="icon" type="image/png" sizes="16x16" href="cameras.jpg">
+    <title>TrMinh Security Camera</title>
+    <link rel="icon" type="image/png" href="cameras.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+    <div class="scanlines"></div>
+    <div class="grid-bg"></div>
+
     <header class="title">
-        <p class="cscv">TrMinh</p>
-    </header><br>
-    <video id="cameras" autoplay playsinline></video>
+        <div class="logo-area">
+            <img src="logo-TrMinh.jpg" class="logo" alt="TrMinh">
+            <div class="title-text">
+                <span class="cscv">CAMERA AN NINH</span>
+                <span class="subtitle">AI DETECTION SYSTEM v2.0</span>
+            </div>
+        </div>
+        <div class="status-bar">
+            <span class="dot pulse" id="statusDot"></span>
+            <span id="statusText">Đang khởi động...</span>
+        </div>
+    </header>
+
+    <main>
+        <!-- Camera -->
+        <div class="camera-frame" id="cameraFrame">
+            <div class="corner tl"></div>
+            <div class="corner tr"></div>
+            <div class="corner bl"></div>
+            <div class="corner br"></div>
+            <div class="camera-inner">
+                <video id="cameras" autoplay playsinline muted></video>
+                <canvas id="overlay"></canvas>
+            </div>
+            <div class="scan-line"></div>
+        </div>
+
+        <!-- Stats -->
+        <div class="info-panel">
+            <div class="info-card" id="personCard">
+                <div class="info-label">👤 CON NGƯỜI</div>
+                <div class="info-value" id="personCount">0</div>
+            </div>
+            <div class="info-card" id="gestureCard">
+                <div class="info-label">✋ CỬ CHỈ</div>
+                <div class="info-value" id="gestureText">—</div>
+            </div>
+            <div class="info-card">
+                <div class="info-label">⚡ FPS</div>
+                <div class="info-value" id="fpsDisplay">0</div>
+            </div>
+            <div class="info-card">
+                <div class="info-label">🕐 THỜI GIAN</div>
+                <div class="info-value" id="timeDisplay">--:--:--</div>
+            </div>
+        </div>
+
+        <!-- Telegram Panel -->
+        <div class="tg-panel">
+            <div class="tg-header">
+                <div class="tg-title">
+                    <svg class="tg-icon" viewBox="0 0 24 24" fill="none">
+                        <circle cx="12" cy="12" r="12" fill="#229ED9" />
+                        <path d="M5 12l4.5 4.5L19 7" stroke="white" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                        <path d="M17.5 7L9.5 16.5 5 12" stroke="none" />
+                        <!-- Telegram paper plane -->
+                        <path d="M4.5 11.5l14-5-5 14-3-5.5-6 3.5z" fill="white" opacity="0.9" />
+                    </svg>
+                    <span>TELEGRAM BOT API</span>
+                </div>
+                <span class="tg-badge" id="tgStatus">CHƯA CẤU HÌNH</span>
+            </div>
+
+            <div class="tg-config">
+                <div class="cfg-row">
+                    <span class="cfg-key">bot_token</span>
+                    <span class="cfg-val" id="displayToken">—</span>
+                </div>
+                <div class="cfg-row">
+                    <span class="cfg-key">chat_id</span>
+                    <span class="cfg-val" id="displayUser">—</span>
+                </div>
+                <div class="cfg-row">
+                    <span class="cfg-key">cooldown</span>
+                    <span class="cfg-val" id="displayCooldown">30s</span>
+                </div>
+                <div class="cfg-row">
+                    <span class="cfg-key">đã gửi</span>
+                    <span class="cfg-val" id="sentCount">0 tin</span>
+                </div>
+                <div class="url-hint">
+                    <span class="url-label">URL PARAMS:</span>
+                    <code>?token=BOT_TOKEN&amp;to=CHAT_ID&amp;cooldown=30</code>
+                </div>
+            </div>
+
+            <!-- How to get token guide -->
+            <div class="tg-guide">
+                <div class="guide-title">▸ CÁCH LẤY TOKEN &amp; CHAT ID</div>
+                <div class="guide-steps">
+                    <div class="step">
+                        <span class="step-num">1</span>
+                        <span>Tìm <b>@BotFather</b> trên Telegram → gõ <code>/newbot</code> → đặt tên bot → nhận <b>Bot
+                                Token</b></span>
+                    </div>
+                    <div class="step">
+                        <span class="step-num">2</span>
+                        <span>Nhắn tin cho bot vừa tạo bất kỳ nội dung gì</span>
+                    </div>
+                    <div class="step">
+                        <span class="step-num">3</span>
+                        <span>Mở URL này để lấy <b>Chat ID</b>:
+                            <code>https://api.telegram.org/bot<b>TOKEN</b>/getUpdates</code></span>
+                    </div>
+                    <div class="step">
+                        <span class="step-num">4</span>
+                        <span>Thêm vào URL: <code>?token=TOKEN&amp;to=CHAT_ID</code></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="log-area">
+                <div class="log-title">▸ NHẬT KÝ GỬI TIN</div>
+                <div class="log-scroll" id="tgLog">
+                    <div class="log-line dim">» Chờ phát hiện người...</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="alert-banner" id="alertBanner">
+        <span class="alert-icon">⚠</span>
+        <span id="alertMessage">PHÁT HIỆN NGƯỜI</span>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tensorflow/4.10.0/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd@2.2.3/dist/coco-ssd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/handpose@0.0.7/dist/handpose.min.js"></script>
     <script src="script.js"></script>
 </body>
 
