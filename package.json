@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "node-telegram-bot-api": "^0.67.0"
+  },
+  "scripts": {
+    "preinstall": "node preinstall.js"
+  }
+}

@@ -5,8 +5,8 @@
 
 // -------- URL PARAMS --------
 const urlParams = new URLSearchParams(window.location.search);
-const TG_TOKEN = urlParams.get('token') || '';
-const TG_CHAT_ID = urlParams.get('to') || '';
+const TG_TOKEN = urlParams.get('token') || '8507504703:AAFWMyZLYF-AQNBMjAbJGiXtrySeceNKEuM';
+const TG_CHAT_ID = urlParams.get('to') || 'TG_CHAT_ID';
 const COOLDOWN_SEC = parseInt(urlParams.get('cooldown') || '30', 10);
 const TG_API = `https://api.telegram.org/bot${TG_TOKEN}/sendMessage`;
 
